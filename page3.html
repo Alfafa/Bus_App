@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
- <link   rel="stylesheet" type="text/css" href='jquery.mobile-1.4.4.min.css'/>
-      <script src="jquery-1.11.1.min.js"></script>
-      <script src="jquery.mobile-1.4.4.min.js"></script>
+ <link   rel="stylesheet" type="text/css" href='http://50.63.128.135/~csashesi/class2015/alfred-gaglo/jquery.mobile-1.4.4.min.css'/>
+      <script src="http://50.63.128.135/~csashesi/class2015/alfred-gaglo/jquery-1.11.1.min.js"></script>
+      <script src="http://50.63.128.135/~csashesi/class2015/alfred-gaglo/jquery.mobile-1.4.4.min.js"></script>
+      <script src="http://50.63.128.135/~csashesi/class2015/alfred-gaglo/barcodescanner.js"></script>
+      <script src="http://50.63.128.135/~csashesi/class2015/alfred-gaglo/cordova.js"></script>
       <script type="text/javascript">
 
+          
+     //document.addEventListener("deviceready",  init);  
+      
+var resultDiv;
+
+      function startScan() { 
+   cordova.plugins.barcodeScanner.scan(  
+    function (result)  { 
+      var s = "Result:  " + result.text + "<br/>" + 
+      "Format:  " + result.format + "<br/>" + 
+      "Cancelled: " + result.cancelled; 
+      resultDiv.innerHTML = s;  
+    },    
+    function (error) { 
+      alert("Scanning failed: " + error); 
+    } 
+);  
+} 
 
 
        function syncAjax(m){
@@ -19,6 +39,8 @@
         return $.parseJSON(obj.responseText);
         
       }
+
+
 
       $(document).ready(function(){
 
@@ -35,6 +57,21 @@
 
 
         });
+
+        $("#barcodescanner").click(function(){
+
+         startScan();
+         resultDiv  = document.querySelector("#results"); 
+
+        });
+
+
+
+
+
+
+
+
           });
 
 
@@ -46,15 +83,15 @@
 data-role="page" id="pageone">
 <div data-role="header">
   
-<h1>ONLINE BUS APPLICATION</h1>
+<h1>BUS APPLICATION</h1>
 
 </div>
 <div data-role="header">
   <div data-role="navbar">
     <ul>
-       <li><a href="index.html" data-icon="home" data-transition="flip">Home</a></li>
-       <li><a href="page2.html" data-icon="info">Bus Schedule</a></li>
-       <li><a href="#"  data-icon="grid" class="ui-btn-active ui-state-persist">Make Reservations</a></li>
+       <li><a href="http://50.63.128.135/~csashesi/class2015/alfred-gaglo/index.html" data-icon="home" data-transition="flip">Home</a></li>
+       <li><a href="http://50.63.128.135/~csashesi/class2015/alfred-gaglo/page2.html" data-icon="info">Bus Schedule</a></li>
+       <li><a href="#"  data-icon="grid" class="ui-btn-active ui-state-persist">Book A Seat</a></li>
       
        
 
@@ -84,8 +121,12 @@ data-role="page" id="pageone">
               </div>
                 <br></br>
                 
-              
+               
               </div>
+              <div  align="center">
+               <a href="#" id="barcodescanner" data-role="button" >Scan a bar code</a>
+              </div>
+              <div id="result"> </div>
               <br></br>
               <br></br>
               <div align="center">
@@ -96,8 +137,7 @@ data-role="page" id="pageone">
 <br></br>
 <br></br>
 <br></br>
-<br></br>
-<br></br>
+
 
 
 
