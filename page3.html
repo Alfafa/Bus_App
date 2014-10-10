@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <link   rel="stylesheet" type="text/css" href='jquery.mobile-1.4.4.min.css'/>
+      <script src="jquery-1.11.1.min.js"></script>
+      <script src="jquery.mobile-1.4.4.min.js"></script>
+      <script type="text/javascript">
+
+
+
+       function syncAjax(m){
+      console.log(m);
+        var obj=$.ajax(
+          {url:m,
+           async:false
+           }
+        );
+        console.log(obj.responseText);
+        return $.parseJSON(obj.responseText);
+        
+      }
+
+      $(document).ready(function(){
+
+
+         $("#reserve").click(function(){
+
+          var name = document.getElementById('Aseat').value;
+          var lc = document.getElementById('P-up').value;
+
+          var u= "bus_gen.php?cmd=4&fn="+name+"&p="+lc;
+
+
+          return syncAjax(u);
+
+
+        });
+          });
+
+
+      </script>
+</head>
+
+<body>
+    <div
+data-role="page" id="pageone">
+<div data-role="header">
+  
+<h1>ONLINE BUS APPLICATION</h1>
+
+</div>
+<div data-role="header">
+  <div data-role="navbar">
+    <ul>
+       <li><a href="index.html" data-icon="home" data-transition="flip">Home</a></li>
+       <li><a href="page2.html" data-icon="info">Bus Schedule</a></li>
+       <li><a href="#"  data-icon="grid" class="ui-btn-active ui-state-persist">Make Reservations</a></li>
+      
+       
+
+    </ul>
+  </div>
+
+  <div role="main" class="ui-content">
+            <br></br>
+            <br></br>
+            <form method="post" action="page3.html">
+              <div data-role="fieldcontain">
+                <label for="Aseat">Name Of Reserver:</label>
+                <input type="text" name="Aseat" id="Aseat">
+                <br></br>
+                <br></br>
+                <div>
+                  <fieldset class="ui-field-contain">
+                <label for="P-up" >Pick-Up Point:</label>
+                <select name="P-up" id="P-up">
+                  <option value="37">37 Military Hospital</option>
+                  <option value="Accra Mall">Accra Mall</option>
+                  <option value="Abom">Abom</option>
+                  <option value="Kwabenya">Kwabenya</option>
+                  <option value="Berekuso">Berekuso</option>
+                </select>
+              </fieldset>
+              </div>
+                <br></br>
+                
+              
+              </div>
+              <br></br>
+              <br></br>
+              <div align="center">
+              <input id="reserve"type="submit" data-inline="true" value="Reserve Seat"  ></div>
+            </form>
+  <br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+
+
+<div data-role="footer">
+              <div data-role="collapsible-set">
+<div data-role="collapsible">
+<h1>More Information</h1>
+<p>You will need to purchase a seat</p>
+</div>
+<div data-role="collapsible">
+<h1>Bus Junctions</h1>
+<p>Accra Mall.</p>
+<p>37 Junction</p>
+<p>Kwabenya</p>
+</div>
+</div>
+
+
+	</body>
+</html>

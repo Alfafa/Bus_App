@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+       <meta charset="UTF-8">
+      <link   rel="stylesheet" type="text/css" href='jquery.mobile-1.4.4.min.css'/>
+      <script src="jquery-1.11.1.min.js"></script>
+      <script src="jquery.mobile-1.4.4.min.js"></script>
+      <script  src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+      <script src="phonegap.js"></script>
+     
+
+     <script type="text/javascript">
+      var geocoder;
+ 
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+} 
+//Get the latitude and the longitude;
+function successFunction(position) {
+    var lat = position.coords.latitude;
+    var lng = position.coords.longitude;
+    codeLatLng(lat, lng)
+}
+ 
+function errorFunction(){
+    alert("Geocoder failed");
+}
+ 
+  function initialize() {
+    geocoder = new google.maps.Geocoder();
+ 
+ 
+ 
+  }
+
+  function codeLatLng(lat, lng) {
+ 
+    var latlng = new google.maps.LatLng(lat, lng);
+    geocoder.geocode({'latLng': latlng}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+      console.log(results)
+        if (results[1]) {
+         //formatted address
+         $('#location').text(results[0].formatted_address)
+        //find country name
+             for (var i=0; i<results[0].address_components.length; i++) {
+            for (var b=0;b<results[0].address_components[i].types.length;b++) {
+ 
+            //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
+                if (results[0].address_components[i].types[b] == "administrative_area_level_1") {
+                    //this is the object you are looking for
+                    city= results[0].address_components[i];
+                    break;
+                }
+            }
+        }
+        //city data
+        //$('#location').text(city.short_name + " " + city.long_name);
+ 
+ 
+        } else {
+          $('#location').text("No results found");
+        }
+      } else {
+        $('#location').text("Geocoder failed due to: " + status);
+      }
+    });
+  }
+
+function syncAjax(m){
+      console.log(m);
+        var obj=$.ajax(
+          {url:m,
+           async:false
+           }
+        );
+        console.log(obj.responseText);
+        return $.parseJSON(obj.responseText);
+        
+      }
+  
+
+
+
+
+    $(document).ready(function(){
+     //decrease the number of passengers;
+      $("#reduce").click(function(){
+       var x = parseInt($('#minus').text(),10);
+       var loc = document.getElementById('location').innerHTML;
+       if(x <= x && x > 0){
+        var reduce = x-1;
+         $('#minus').text(x-1);
+         var m = "bus_gen.php?cmd=1&s="+reduce+"&l="+loc;
+           return syncAjax(m);
+}
+    });
+      
+      //reset the available number of seats;
+      $("#reset").click(function(){
+         var x = 30;
+         var y = document.getElementById('location').innerHTML;
+        var u = syncAjax("bus_gen.php?cmd=1&s="+x+"&l="+y);
+        $('#minus').text(x);
+        
+       // $('#minus').text(30);
+    });
+
+
+      
+      //increase the number of passengers
+      $("#increase").click(function(){
+       var b = parseInt($('#minus').text(),10);
+         var loc = document.getElementById('location').innerHTML;
+         if(b<30){
+          var increase = b+1;
+          $('#minus').text(b+1);
+             var n = "bus_gen.php?cmd=1&s="+increase+"&l="+loc;
+           return syncAjax(n);
+
+         }
+
+    });
+
+ $("#view").click(function(){
+
+      var n = "bus_gen.php?cmd=5";
+          t = syncAjax(n);
+
+      for(var i=0; i < t.reserveList.length; i++){
+        var th =  t.reserveList[i].reserve_name +" " +t.reserveList[i].pick_up;
+       
+
+        $('<li data-role="list">' + th + '</a></li>').appendTo($('#sth'));
+
+      }
+
+
+    });
+
+
+
+
+     });
+     </script>
+
+    </head>
+<body  onload="initialize()">
+
+<div
+data-role="page" id="pageone" data-theme="a">
+<div data-role="header">
+  
+<h1>BUS APPLICATION</h1>
+
+</div>
+<div data-role="header">
+  <div data-role="navbar">
+    <ul>
+       <li><a href="#"  data-icon="home" data-iconpos="notext">Home</a></li>
+       
+       <li><a href="page2.html" data-transition="slide"class="ui-btn-active ui-state-persist" data-icon="arrow-r">Make Reservations</a></li>
+       
+       
+
+    </ul>
+
+
+  </div>
+
+
+
+            <div role="main" class="ui-content">
+            <br></br>
+            <br></br>
+            <form method="post" action="demoform.asp">
+              <div data-role="fieldcontain" align=>
+                <div align="center">
+                <label for="Aseat">AVAILABLE SEATS</label>
+                <br></br>
+                <div id="minus" style="font-size:500%" ></div>
+                </div>
+                <br></br>
+                
+              </div >
+               <div data-role="controlgroup" data-type="horizontal" align="center">
+              <p id="location" style='font-size:100%'>Searching....</p>
+              <input type="button" id="reduce" value="Reduce">
+              <input type="button" id="reset"value="Reset">
+              <input type="button" id="increase"value="Add New" >
+              <br></br>
+              <br></br>
+              <br></br>
+              <div align="center">
+                <input  id="view" type="button" value="View Reserved List" ><br></br><br></br>
+                <div>
+                <ul data-role="listview" id="sth" data-insert="true" >
+                </ul> 
+                </div>
+              
+
+
+
+             </div>
+             <div>
+           </form>
+
+       <br></br>
+       <br></br>
+       <br></br>
+       <br></br>
+
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+
+
+           <div data-role="footer">
+	            <div data-role="collapsible-set">
+<div data-role="collapsible">
+<h1>More Information</h1>
+<p>You will need to purchase a seat</p>
+</div>
+<div data-role="collapsible">
+
+</div>
+               </div>
+        
+       
+</html>
+
+

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta charset="UTF-8">
+ <link   rel="stylesheet" type="text/css" href='jquery.mobile-1.4.4.min.css'/>
+      <script src="jquery-1.11.1.min.js"></script>
+      <script src="jquery.mobile-1.4.4.min.js"></script>
+      <script type="text/javascript">
+      function initialize() {
+    window.location.reload(true);
+ 
+  }
+        
+     function syncAjax(m){
+      console.log(m);
+        var obj=$.ajax(
+          {url:m,
+           async:false
+           }
+        );
+        console.log(obj.responseText);
+        return $.parseJSON(obj.responseText);
+        
+      }
+
+
+
+        $(document).ready(function(){
+          
+          $("#refresh").click(function(){
+             
+            var u = "bus_gen.php?cmd=3";
+            var r= syncAjax(u);
+            $('#lcurrent').val(r.check.Seat_Available);
+            $('#lname').val(r.check.Location);
+            
+       
+    });
+
+
+
+        });
+
+
+
+      </script>
+</head>
+
+<body >
+    <div
+data-role="page" id="pageone">
+<div data-role="header">
+  
+<h1>ONLINE BUS APPLICATION</h1>
+
+</div>
+<div data-role="header">
+  <div data-role="navbar">
+    <ul>
+       <li><a href="index.html" data-icon="home" data-transition="flip">Home</a></li>
+       <li><a href="#" class="ui-btn-active ui-state-persist" data-icon="info">Bus Schedule</a></li>
+       <li><a href="page3.html" data-icon="grid" >Make Reservations</a></li>
+       
+       
+
+    </ul>
+  </div>
+
+
+   <div role="main" class="ui-content">
+            <br></br>
+            <br></br>
+            <form method="post" action="page2.html">
+              <div data-role="fieldcontain">
+                
+                <label for="lname" >Current Location:</label>
+                <input type="text" name="lname" id="lname">
+                <br></br>
+                <br></br>
+                <label for="lcurrent" >Current Number of Passengers:</label>
+                <input type="text" name="lcurrent" id="lcurrent">
+                <br></br>
+                <br></br>
+                <br></br>
+                <input  id="refresh" type="button" data-inline="true" value="Refresh to Check Status"  >
+              </div>
+
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
+                 <div data-role="footer">
+	            <div data-role="collapsible-set">
+<div data-role="collapsible">
+<h1>More Information</h1>
+<p>You will need to purchase a seat</p>
+</div>
+
+</div>
+</div>
+
+
+	</body>
+</html>
